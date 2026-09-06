@@ -262,12 +262,7 @@ export default async function IncidentDetailPage({
 
 
                 <DispatchButton
-                    incidentId={
-                        incident.id
-                    }
-                    status={
-                        incident.status
-                    }
+                incidentId={incident.id}
                 />
 
             </div>
