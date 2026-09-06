@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "../lib/supabase/supabase"
+import { createClient } from "../lib/supabase/client";
 
 export default function DispatchButton({
   incidentId,
 }: {
   incidentId: string;
 }) {
+  const supabase = createClient();
+
   const [loading, setLoading] = useState(false);
 
   async function handleDispatch() {
@@ -16,7 +18,6 @@ export default function DispatchButton({
 
       console.log("Dispatching incident:", incidentId);
 
-      // 1. Check current user/session
       const {
         data: { session },
         error: sessionError,
@@ -33,7 +34,6 @@ export default function DispatchButton({
         return;
       }
 
-      // 2. Dispatch incident
       const {
         data: dispatchData,
         error: dispatchError,
@@ -51,7 +51,6 @@ export default function DispatchButton({
         return;
       }
 
-      // 3. Invoke push Edge Function
       const {
         data: pushData,
         error: pushError,
@@ -73,16 +72,12 @@ export default function DispatchButton({
       if (pushError) {
         console.error("FULL PUSH ERROR:", pushError);
 
-        alert(
-          `Push function failed: ${pushError.message}`
-        );
+        alert(`Push function failed: ${pushError.message}`);
         return;
       }
 
       if (!pushData) {
-        alert(
-          "The Edge Function returned no response."
-        );
+        alert("The Edge Function returned no response.");
         return;
       }
 
